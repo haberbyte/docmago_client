@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = DocmagoClient::VERSION
   s.authors     = ["Jan Habermann"]
   s.email       = ["jan@habermann24.com"]
-  s.homepage    = "www.docmago.com"
-  s.summary     = "TODO: Summary of DocmagoClient."
-  s.description = "TODO: Description of DocmagoClient."
+  s.homepage    = "http://github.com/docmago/docmago_client"
+  s.summary     = "Client for the Docmago API (www.docmago.com)"
+  s.description = "Makes it easy to create PDF documents through the Docmago API."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
