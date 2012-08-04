@@ -18,6 +18,11 @@ module DocmagoClient
   
   base_uri ENV["DOCMAGO_URL"] || "https://docmago.com/api/"
   
+  def self.base_uri(uri = nil)
+    default_options[:base_uri] = uri ? uri : default_options[:base_uri] || ENV["DOCMAGO_URL"]
+    default_options[:base_uri]
+  end
+  
   def self.api_key(key = nil)
     default_options[:api_key] = key ? key : default_options[:api_key] || ENV["DOCMAGO_API_KEY"]
     default_options[:api_key] || raise(DocmagoClient::Error::NoApiKeyProvidedError.new("No API key provided"))

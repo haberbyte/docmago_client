@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docmago_client (0.0.1)
+    docmago_client (0.0.2)
       httparty (>= 0.7.0)
 
 GEM

@@ -16,6 +16,7 @@ module DocmagoClient
         default_options = {
           :name      => filename||controller_name,
           :test_mode => !Rails.env.production?,
+          :base_uri  => url_for(:only_path => false)
         }
         options = default_options.merge(options)
         options[:content] ||= render_to_string(options)
