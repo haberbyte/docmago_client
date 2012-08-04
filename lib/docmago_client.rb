@@ -7,16 +7,9 @@ require 'docmago_client/error'
 
 if defined?(Rails)
   if Rails.respond_to?(:version) && Rails.version =~ /^3/
-    require 'docmago_client/pdf_renderer'
-    
-    module DocmagoClient
-      class Railtie < Rails::Railtie
-
-        initializer "docmago_client" do |app|
-          DocmagoClient::PdfRenderer.init(:config => app.config)
-        end
-      end
-    end
+    require 'docmago_client/railtie'
+  else
+    raise "docmago_client #{DocmagoClient::VERSION} is not compatible with Rails 2.3 or older"
   end
 end
 
