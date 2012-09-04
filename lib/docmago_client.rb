@@ -52,14 +52,18 @@ module DocmagoClient
     raise_exception_on_failure = options[:raise_exception_on_failure]
     options.delete :raise_exception_on_failure
     
-    tmp_dir = Dir.mktmpdir
-    begin
-      resource_archiver = HTMLResourceArchiver.new(options[:content], options[:public_path])
-      options[:content] = File.new(resource_archiver.create_zip("#{tmp_dir}/document.zip"))
+    if options[:zip_resources]
+      tmp_dir = Dir.mktmpdir
+      begin
+        resource_archiver = HTMLResourceArchiver.new(options[:content], options[:resource_path])
+        options[:content] = File.new(resource_archiver.create_zip("#{tmp_dir}/document.zip"))
     
+        response = post("/documents", body: { document: options }, basic_auth: { username: api_key })
+      ensure
+        FileUtils.remove_entry_secure tmp_dir
+      end
+    else
       response = post("/documents", body: { document: options }, basic_auth: { username: api_key })
-    ensure
-      FileUtils.remove_entry_secure tmp_dir
     end
 
     if raise_exception_on_failure && !response.success?
