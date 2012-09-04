@@ -1,9 +1,10 @@
-require "httparty"
+require "httmultiparty"
 require "tempfile"
 
 require 'docmago_client/version'
 require 'docmago_client/exception'
 require 'docmago_client/error'
+require 'docmago_client/html_resource_archiver'
 
 if defined?(Rails)
   if Rails.respond_to?(:version) && Rails.version =~ /^3/
@@ -14,9 +15,9 @@ if defined?(Rails)
 end
 
 module DocmagoClient
-  include HTTParty
+  include HTTMultiParty
   
-  base_uri ENV["DOCMAGO_URL"] || "https://docmago.com/api/"
+  base_uri ENV["DOCMAGO_URL"] || "https://docmago.com/api"
   
   def self.base_uri(uri = nil)
     default_options[:base_uri] = uri ? uri : default_options[:base_uri] || ENV["DOCMAGO_URL"]
@@ -51,7 +52,15 @@ module DocmagoClient
     raise_exception_on_failure = options[:raise_exception_on_failure]
     options.delete :raise_exception_on_failure
     
-    response = post("/documents", body: { document: options }, basic_auth: { username: api_key })
+    tmp_dir = Dir.mktmpdir
+    begin
+      resource_archiver = HTMLResourceArchiver.new(options[:content], options[:public_path])
+      options[:content] = File.new(resource_archiver.create_zip("#{tmp_dir}/document.zip"))
+    
+      response = post("/documents", body: { document: options }, basic_auth: { username: api_key })
+    ensure
+      FileUtils.remove_entry_secure tmp_dir
+    end
 
     if raise_exception_on_failure && !response.success?
       raise DocmagoClient::Exception::DocumentCreationFailure.new response.body, response.code
