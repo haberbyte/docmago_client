@@ -30,7 +30,7 @@ module DocmagoClient
       end
       
       def normalize_uri(uri)
-        uri = URI.parse(URI.encode(uri.strip))
+        uri = URI.parse(URI.encode(uri.to_s.strip))
         uri.query = nil
         uri.to_s
       end
