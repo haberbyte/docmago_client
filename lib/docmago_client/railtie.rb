@@ -32,7 +32,7 @@ module DocmagoClient
         response = DocmagoClient.create(options)
         
         if response.code == 200
-          send_data response, filename: "#{options[:name]}.pdf", type: "application/pdf", disposition: "inline"
+          send_data response, filename: "#{options[:name]}.pdf", type: "application/pdf", disposition: "attachment"
         else
           render inline: response.body, status: response.code
         end
