@@ -1,2 +1,2 @@
-DocmagoClient.base_uri "http://localhost:3000/api/"
-DocmagoClient.api_key  "Hq2zWQ8pfDjbRGZuvJhy"
+DocmagoClient.base_uri "http://docmago.dev/api"
+DocmagoClient.api_key  "2rP35bmKnPr4Uj9iiEnE"

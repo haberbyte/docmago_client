@@ -1,6 +1,5 @@
 module DocmagoClient
   class Railtie < Rails::Railtie
-
     initializer "docmago_client" do |app|
       ActiveSupport.on_load :action_controller do
         DocmagoClient::Railtie.setup_actioncontroller
@@ -26,7 +25,7 @@ module DocmagoClient
         response = DocmagoClient.create(options)
         
         if response.code == 200
-          send_data response, :filename => "#{options[:name]}.pdf", :type => "application/pdf", :disposition => "attachment"
+          send_data response, :filename => "#{options[:name]}.pdf", :type => "application/pdf", :disposition => "inline"
         else
           render :inline => response.body, :status => response.code
         end

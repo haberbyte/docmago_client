@@ -19,35 +19,36 @@ module DocmagoClient
   
   base_uri ENV["DOCMAGO_URL"] || "https://docmago.com/api"
   
-  def self.base_uri(uri = nil)
+  def self.base_uri(uri=nil)
     default_options[:base_uri] = uri ? uri : default_options[:base_uri] || ENV["DOCMAGO_URL"]
     default_options[:base_uri]
   end
   
-  def self.api_key(key = nil)
+  def self.api_key(key=nil)
     default_options[:api_key] = key ? key : default_options[:api_key] || ENV["DOCMAGO_API_KEY"]
     default_options[:api_key] || raise(DocmagoClient::Error::NoApiKeyProvidedError.new("No API key provided"))
   end
 
-  def self.create!(options = {})
+  def self.create!(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
-    self.create(options.merge({:raise_exception_on_failure => true}))
+    self.create options.merge({:raise_exception_on_failure => true})
   end
 
   # when given a block, hands the block a TempFile of the resulting document
   # otherwise, just returns the response
-  def self.create(options = { })
+  def self.create(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
     if options[:content].nil? || options[:content].empty?
       raise DocmagoClient::Error::NoContentError.new("must supply :content")
     end
 
     default_options = {
-      :name                       => "default",
-      :type                       => "pdf",
-      :test_mode                  => false,
-      :raise_exception_on_failure => false
+      name: "default",
+      type: "pdf",
+      test_mode: false,
+      raise_exception_on_failure: false
     }
+    
     options = default_options.merge(options)
     raise_exception_on_failure = options[:raise_exception_on_failure]
     options.delete :raise_exception_on_failure
@@ -85,12 +86,12 @@ module DocmagoClient
     end
   end
 
-  def self.list_docs!(options = { })
+  def self.list_docs!(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
     self.list_docs(options.merge({:raise_exception_on_failure => true}))
   end
 
-  def self.list_docs(options = { })
+  def self.list_docs(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
     default_options = {
       :page     => 1,

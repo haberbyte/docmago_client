@@ -10,7 +10,7 @@ class NavigationTest < ActiveSupport::IntegrationCase
     click_link 'PDF'
     
     assert_equal 'binary', headers['Content-Transfer-Encoding']
-    assert_equal 'attachment; filename="contents.pdf"', headers['Content-Disposition']
+    assert_equal 'inline; filename="contents.pdf"', headers['Content-Disposition']
     assert_equal 'application/pdf', headers['Content-Type']
   end
   

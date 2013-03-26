@@ -3,9 +3,11 @@ module DocmagoClient
     class RequestException < StandardError
       attr_accessor :status_code
       attr_accessor :message
+      
       def initialize(message, status_code)
         self.message     = message
         self.status_code = status_code
+        
         super message
       end
 
@@ -18,8 +20,8 @@ module DocmagoClient
       end
     end
     class DocumentCreationFailure < DocmagoClient::Exception::RequestException; end
-    class DocumentListingFailure  < DocmagoClient::Exception::RequestException; end
-    class DocumentStatusFailure   < DocmagoClient::Exception::RequestException; end
+    class DocumentListingFailure < DocmagoClient::Exception::RequestException; end
+    class DocumentStatusFailure < DocmagoClient::Exception::RequestException; end
     class DocumentDownloadFailure < DocmagoClient::Exception::RequestException; end
   end
 end
