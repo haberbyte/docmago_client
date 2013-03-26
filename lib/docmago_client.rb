@@ -31,7 +31,7 @@ module DocmagoClient
 
   def self.create!(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
-    self.create options.merge({:raise_exception_on_failure => true})
+    self.create options.merge(raise_exception_on_failure: true)
   end
 
   # when given a block, hands the block a TempFile of the resulting document
@@ -88,21 +88,21 @@ module DocmagoClient
 
   def self.list_docs!(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
-    self.list_docs(options.merge({:raise_exception_on_failure => true}))
+    self.list_docs options.merge(raise_exception_on_failure: true)
   end
 
   def self.list_docs(options={})
     raise ArgumentError.new "please pass in an options hash" unless options.is_a? Hash
     default_options = {
-      :page     => 1,
-      :per_page => 100,
-      :raise_exception_on_failure => false
+      page: 1,
+      per_page: 100,
+      raise_exception_on_failure: false
     }
     options = default_options.merge(options)
     raise_exception_on_failure = options[:raise_exception_on_failure]
     options.delete :raise_exception_on_failure
 
-    response = get("/documents", :query => options, :basic_auth => { :username => api_key })
+    response = get("/documents", query: options, basic_auth: { username: api_key })
     if raise_exception_on_failure && !response.success?
       raise DocmagoClient::Exception::DocumentListingFailure.new response.body, response.code
     end

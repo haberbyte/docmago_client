@@ -13,21 +13,22 @@ module DocmagoClient
 
       ActionController::Renderers.add :pdf do |filename, options|
         default_options = {
-          :name          => filename||controller_name,
-          :test_mode     => !Rails.env.production?,
-          :base_uri      => url_for(:only_path => false),
-          :zip_resources => true,
-          :resource_path => Rails.root.join('public')
+          name: filename||controller_name,
+          test_mode: !Rails.env.production?,
+          base_uri: url_for(only_path: false),
+          zip_resources: true,
+          resource_path: Rails.root.join('public')
         }
+        
         options = default_options.merge(options)
         options[:content] ||= render_to_string(options)
             
         response = DocmagoClient.create(options)
         
         if response.code == 200
-          send_data response, :filename => "#{options[:name]}.pdf", :type => "application/pdf", :disposition => "inline"
+          send_data response, filename: "#{options[:name]}.pdf", type: "application/pdf", disposition: "inline"
         else
-          render :inline => response.body, :status => response.code
+          render inline: response.body, status: response.code
         end
       end
     end
