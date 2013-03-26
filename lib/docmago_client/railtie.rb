@@ -12,12 +12,18 @@ module DocmagoClient
       end
 
       ActionController::Renderers.add :pdf do |filename, options|
+        # Allow PDFs to be resolved in app/views/examples/pdf/
+        append_view_path ActionView::FileSystemResolver.new(
+          Rails.root.join("app/views"),
+          ":prefix/{:formats/,}:action{.:locale,}{.:formats,}{.:handlers,}"
+        )
+        
         default_options = {
           name: filename||controller_name,
           test_mode: !Rails.env.production?,
           base_uri: url_for(only_path: false),
-          zip_resources: true,
-          resource_path: Rails.root.join('public')
+          resource_path: Rails.root.join('public'),
+          zip_resources: true
         }
         
         options = default_options.merge(options)
