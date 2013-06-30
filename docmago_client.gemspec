@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
   
-  s.add_dependency "httparty", ">=0.10.2"
-  s.add_dependency "httmultiparty", ">=0.3.8"
+  s.add_dependency "httparty", ">=0.11.0"
+  s.add_dependency "httmultiparty", ">=0.3.10"
   s.add_dependency "nokogiri", ">=1.5.9"
   s.add_dependency "rubyzip", ">=0.9.9"
   
