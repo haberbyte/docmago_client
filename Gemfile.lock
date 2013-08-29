@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    docmago_client (0.1.5)
+    docmago_client (0.2.0)
       httmultiparty (>= 0.3.10)
       httparty (>= 0.11.0)
-      nokogiri (>= 1.5.9)
-      rubyzip (>= 0.9.9)
+      nokogiri (>= 1.6.0)
+      rubyzip (>= 1.0.0)
 
 GEM
   remote: http://rubygems.org/
@@ -65,7 +65,7 @@ GEM
     mime-types (1.23)
     mini_portile (0.5.0)
     multi_json (1.7.7)
-    multi_xml (0.5.4)
+    multi_xml (0.5.5)
     multipart-post (1.2.0)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
@@ -95,7 +95,7 @@ GEM
     rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
-    rubyzip (0.9.9)
+    rubyzip (1.0.0)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
