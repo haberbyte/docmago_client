@@ -10,7 +10,9 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/docmago/docmago_client"
   s.summary     = "Client for the Docmago API (www.docmago.com)"
   s.description = "Makes it easy to create PDF documents through the Docmago API."
-
+  
+  s.license     = 'MIT'
+  
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
   
