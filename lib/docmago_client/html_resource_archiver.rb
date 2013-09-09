@@ -16,7 +16,7 @@ module DocmagoClient
       
         fetch_uris.each do |uri|
           if File.exists?(resolve_uri(uri))
-            zipfile.get_output_steam(normalize_uri(uri)) { |f| f.write(File.read(resolve_uri(uri))) }
+            zipfile.get_output_stream(normalize_uri(uri)) { |f| f.write(File.read(resolve_uri(uri))) }
           end
         end
       end
