@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    docmago_client (0.2.2)
+    docmago_client (0.2.3)
       addressable (>= 2.3.5)
       httmultiparty (>= 0.3.10)
       httparty (>= 0.11.0)
