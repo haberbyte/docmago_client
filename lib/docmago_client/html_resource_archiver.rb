@@ -1,6 +1,15 @@
+require 'digest'
+require 'open-uri'
 require 'addressable/uri'
 require 'nokogiri'
 require 'zip'
+
+class URI::Parser
+  def split url
+    a = Addressable::URI::parse url
+    [a.scheme, a.userinfo, a.host, a.port, nil, a.path, nil, a.query, a.fragment]
+  end
+end
 
 module DocmagoClient
   class HTMLResourceArchiver
@@ -15,14 +24,17 @@ module DocmagoClient
         zipfile.get_output_stream("document.html") { |f| f.write @html }
         
         fetch_uris.each do |uri|
-          if File.exists?(resolve_uri(uri))
-            path = normalize_uri(uri).start_with?('/') ? normalize_uri(uri)[1..-1] : normalize_uri(uri)
-            zipfile.get_output_stream(path) { |f| f.write(File.read(resolve_uri(uri))) }
-          end
+          uri = Addressable::URI.parse uri.to_s.strip
+          path_digest = Digest::MD5.hexdigest(normalize_uri(uri))
+          
+          file_data   = open(uri).read if uri.absolute?
+          file_data ||= File.read(resolve_uri(uri)) if File.exists?(resolve_uri(uri))
+          
+          zipfile.get_output_stream(path_digest) { |f| f.write file_data } if file_data
         end
       end
     
-      return file_path
+      file_path
     end
   
     private
