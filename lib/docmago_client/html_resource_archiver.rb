@@ -13,10 +13,11 @@ module DocmagoClient
     def create_zip(file_path)
       Zip::File.open(file_path, Zip::File::CREATE) do |zipfile|
         zipfile.get_output_stream("document.html") { |f| f.write @html }
-      
+        
         fetch_uris.each do |uri|
           if File.exists?(resolve_uri(uri))
-            zipfile.get_output_stream(normalize_uri(uri)) { |f| f.write(File.read(resolve_uri(uri))) }
+            path = normalize_uri(uri).start_with?('/') ? normalize_uri(uri)[1..-1] : normalize_uri(uri)
+            zipfile.get_output_stream(path) { |f| f.write(File.read(resolve_uri(uri))) }
           end
         end
       end
