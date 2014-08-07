@@ -22,7 +22,7 @@ module DocmagoClient
           name: filename||controller_name,
           test_mode: !Rails.env.production?,
           base_uri: url_for(only_path: false),
-          resource_path: Rails.root.join('public'),
+          resource_path: Rails.root.join('public').to_s,
           zip_resources: true
         }
         
