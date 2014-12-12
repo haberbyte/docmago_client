@@ -23,6 +23,7 @@ module DocmagoClient
           test_mode: Rails.env.development?,
           base_uri: url_for(only_path: false),
           resource_path: Rails.root.join('public').to_s,
+          assets: Rails.application.assets,
           zip_resources: true
         }
 

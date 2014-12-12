@@ -56,8 +56,9 @@ module DocmagoClient
     if options[:zip_resources]
       tmp_dir = Dir.mktmpdir
       begin
-        resource_archiver = HTMLResourceArchiver.new(options[:content], options[:resource_path])
+        resource_archiver = HTMLResourceArchiver.new(options)
         options[:content] = File.new(resource_archiver.create_zip("#{tmp_dir}/document.zip"))
+        options.delete :assets
 
         response = post('/documents', body: { document: options }, basic_auth: { username: api_key })
       ensure
