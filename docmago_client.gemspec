@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   # TODO: use rest-client gem
   s.add_dependency 'httparty', '>= 0.13.0'
   s.add_dependency 'httmultiparty', '>= 0.3.10'
+  s.add_dependency 'rubyzip', '>= 1.0'
   s.add_dependency 'nokogiri', '~> 1.6'
-  s.add_dependency 'rubyzip', '~> 1.1'
   s.add_dependency 'addressable', '~> 2.3'
 
   s.add_development_dependency 'rails', '~> 4.1'

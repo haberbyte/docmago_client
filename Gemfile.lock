@@ -1,12 +1,12 @@
 PATH
   remote: .
   specs:
-    docmago_client (0.4.0)
+    docmago_client (0.4.1)
       addressable (~> 2.3)
       httmultiparty (>= 0.3.10)
       httparty (>= 0.13.0)
       nokogiri (~> 1.6)
-      rubyzip (~> 1.1)
+      rubyzip (>= 1.0)
 
 GEM
   remote: http://rubygems.org/
