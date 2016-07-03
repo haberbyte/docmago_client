@@ -1,6 +1,7 @@
 module DocmagoClient
   class Railtie < Rails::Railtie
     initializer 'docmago_client' do |_app|
+      DocmagoClient.logger = Rails.logger
       ActiveSupport.on_load :action_controller do
         DocmagoClient::Railtie.setup_actioncontroller
       end
@@ -30,12 +31,14 @@ module DocmagoClient
         options = default_options.merge(options)
         options[:content] ||= render_to_string(options)
 
-        response = DocmagoClient.create(options)
+        docmago_response = DocmagoClient.create(options)
+        logger.info "Docmago response - status: #{docmago_response.code}; size: #{docmago_response.body.size}"
 
-        if response.code == 200
-          send_data response, filename: "#{options[:name]}.pdf", type: 'application/pdf', disposition: 'attachment'
+        if docmago_response.code == 200
+          response.headers['Content-Length'] = docmago_response.body.size.to_s
+          send_data docmago_response, filename: "#{options[:name]}.pdf", type: 'application/pdf', disposition: 'attachment'
         else
-          render inline: response.body, status: response.code
+          render inline: docmago_response.body, status: docmago_response.code
         end
       end
     end

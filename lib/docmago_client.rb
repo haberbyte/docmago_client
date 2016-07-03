@@ -19,6 +19,14 @@ module DocmagoClient
 
   base_uri ENV['DOCMAGO_URL'] || 'https://docmago.com/api'
 
+  class << self
+    attr_writer :logger
+
+    def logger
+      @logger ||= Logger.new($stdout)
+    end
+  end
+
   def self.base_uri(uri = nil)
     default_options[:base_uri] = uri ? uri : default_options[:base_uri] || ENV['DOCMAGO_URL']
     default_options[:base_uri]
@@ -30,16 +38,16 @@ module DocmagoClient
   end
 
   def self.create!(options = {})
-    raise ArgumentError.new 'please pass in an options hash' unless options.is_a? Hash
+    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
     create options.merge(raise_exception_on_failure: true)
   end
 
   # when given a block, hands the block a TempFile of the resulting document
   # otherwise, just returns the response
   def self.create(options = {})
-    raise ArgumentError.new 'please pass in an options hash' unless options.is_a? Hash
+    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
     if options[:content].nil? || options[:content].empty?
-      raise DocmagoClient::Error::NoContentError.new('must supply :content')
+      raise DocmagoClient::Error::NoContentError.new, 'must supply :content'
     end
 
     default_options = {
@@ -88,12 +96,12 @@ module DocmagoClient
   end
 
   def self.list_docs!(options = {})
-    raise ArgumentError.new 'please pass in an options hash' unless options.is_a? Hash
+    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
     list_docs options.merge(raise_exception_on_failure: true)
   end
 
   def self.list_docs(options = {})
-    raise ArgumentError.new 'please pass in an options hash' unless options.is_a? Hash
+    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
     default_options = {
       page: 1,
       per_page: 100,
