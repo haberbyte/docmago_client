@@ -31,14 +31,13 @@ module DocmagoClient
         options = default_options.merge(options)
         options[:content] ||= render_to_string(options)
 
-        docmago_response = DocmagoClient.create(options)
-        logger.info "Docmago response - status: #{docmago_response.code}; size: #{docmago_response.body.size}"
+        res = DocmagoClient.create(options)
+        logger.info "Docmago response - status: #{res.code}; size: #{res.body.size}"
 
-        if docmago_response.code == 200
-          response.headers['Content-Length'] = docmago_response.body.size.to_s
-          send_data docmago_response, filename: "#{options[:name]}.pdf", type: 'application/pdf', disposition: 'attachment'
+        if res.code == 200
+          send_data res.body, filename: "#{options[:name]}.pdf", type: 'application/pdf', disposition: 'attachment'
         else
-          render inline: docmago_response.body, status: docmago_response.code
+          render inline: res.body, status: res.code
         end
       end
     end

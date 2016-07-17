@@ -13,9 +13,7 @@ Gem::Specification.new do |s|
   s.description = 'Makes it easy to create PDF documents through the Docmago API.'
   s.files       = Dir['README.md', 'LICENSE', 'lib/**/*.rb']
 
-  # TODO: use rest-client gem
-  s.add_dependency 'httparty', '>= 0.13.0'
-  s.add_dependency 'httmultiparty', '>= 0.3.10'
+  s.add_dependency 'typhoeus', '>= 1.0'
   s.add_dependency 'rubyzip', '>= 1.0'
   s.add_dependency 'nokogiri', '~> 1.6'
   s.add_dependency 'addressable', '~> 2.3'

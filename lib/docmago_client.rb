@@ -1,4 +1,4 @@
-require 'httmultiparty'
+require 'typhoeus'
 require 'tempfile'
 
 require 'docmago_client/version'
@@ -15,31 +15,21 @@ if defined?(Rails)
 end
 
 module DocmagoClient
-  include HTTMultiParty
-
-  base_uri ENV['DOCMAGO_URL'] || 'https://docmago.com/api'
-
   class << self
+    attr_accessor :base_uri, :api_key
     attr_writer :logger
 
     def logger
       @logger ||= Logger.new($stdout)
     end
-  end
 
-  def self.base_uri(uri = nil)
-    default_options[:base_uri] = uri ? uri : default_options[:base_uri] || ENV['DOCMAGO_URL']
-    default_options[:base_uri]
-  end
+    def base_uri
+      @base_uri || ENV['DOCMAGO_URL'] || 'https://docmago.com/api'
+    end
 
-  def self.api_key(key = nil)
-    default_options[:api_key] = key ? key : default_options[:api_key] || ENV['DOCMAGO_API_KEY']
-    default_options[:api_key] || raise(DocmagoClient::Error::NoApiKeyProvidedError.new('No API key provided'))
-  end
-
-  def self.create!(options = {})
-    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
-    create options.merge(raise_exception_on_failure: true)
+    def api_key
+      @api_key || ENV['DOCMAGO_API_KEY']
+    end
   end
 
   # when given a block, hands the block a TempFile of the resulting document
@@ -58,8 +48,6 @@ module DocmagoClient
     }
 
     options = default_options.merge(options)
-    raise_exception_on_failure = options[:raise_exception_on_failure]
-    options.delete :raise_exception_on_failure
 
     if options[:zip_resources]
       tmp_dir = Dir.mktmpdir
@@ -68,16 +56,18 @@ module DocmagoClient
         options[:content] = File.new(resource_archiver.create_zip("#{tmp_dir}/document.zip"))
         options.delete :assets
 
-        response = post('/documents', body: { document: options }, basic_auth: { username: api_key })
+        response = Typhoeus.post "#{base_uri}/documents", body: {
+          auth_token: api_key,
+          document: { content: options[:content] }
+        }
       ensure
         FileUtils.remove_entry_secure tmp_dir
       end
     else
-      response = post('/documents', body: { document: options }, basic_auth: { username: api_key })
-    end
-
-    if raise_exception_on_failure && !response.success?
-      raise DocmagoClient::Exception::DocumentCreationFailure.new response.body, response.code
+      response = Typhoeus.post "#{base_uri}/documents", body: {
+        auth_token: api_key,
+        document: options
+      }
     end
 
     if block_given?
@@ -93,29 +83,5 @@ module DocmagoClient
     else
       response
     end
-  end
-
-  def self.list_docs!(options = {})
-    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
-    list_docs options.merge(raise_exception_on_failure: true)
-  end
-
-  def self.list_docs(options = {})
-    raise ArgumentError, 'please pass in an options hash' unless options.is_a? Hash
-    default_options = {
-      page: 1,
-      per_page: 100,
-      raise_exception_on_failure: false
-    }
-    options = default_options.merge(options)
-    raise_exception_on_failure = options[:raise_exception_on_failure]
-    options.delete :raise_exception_on_failure
-
-    response = get('/documents', query: options, basic_auth: { username: api_key })
-    if raise_exception_on_failure && !response.success?
-      raise DocmagoClient::Exception::DocumentListingFailure.new response.body, response.code
-    end
-
-    response
   end
 end
