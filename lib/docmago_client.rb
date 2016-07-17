@@ -42,9 +42,7 @@ module DocmagoClient
 
     default_options = {
       name: 'default',
-      type: 'pdf',
-      test_mode: false,
-      raise_exception_on_failure: false
+      type: 'pdf'
     }
 
     options = default_options.merge(options)
@@ -58,7 +56,7 @@ module DocmagoClient
 
         response = Typhoeus.post "#{base_uri}/documents", body: {
           auth_token: api_key,
-          document: { content: options[:content] }
+          document: options.slice(:content, :name, :type, :test_mode)
         }
       ensure
         FileUtils.remove_entry_secure tmp_dir
@@ -66,7 +64,7 @@ module DocmagoClient
     else
       response = Typhoeus.post "#{base_uri}/documents", body: {
         auth_token: api_key,
-        document: options
+        document: options.slice(:content, :name, :type, :test_mode)
       }
     end
 
@@ -74,7 +72,7 @@ module DocmagoClient
       ret_val = nil
       Tempfile.open('docmago') do |f|
         f.sync = true
-        f.write(response.body)
+        f.write(response.body.force_encoding('utf-8'))
         f.rewind
 
         ret_val = yield f, response
