@@ -42,7 +42,8 @@ module DocmagoClient
 
     default_options = {
       name: 'default',
-      type: 'pdf'
+      type: 'pdf',
+      integrity_check: true
     }
 
     options = default_options.merge(options)
@@ -66,6 +67,10 @@ module DocmagoClient
         auth_token: api_key,
         document: options.slice(:content, :name, :type, :test_mode)
       }
+    end
+
+    if options[:integrity_check] && response.headers['X-Docmago-Checksum'] != Digest::MD5.hexdigest(response.body)
+      raise DocmagoClient::Error::IntegrityCheckError.new, 'File corrupt (invalid MD5 checksum)'
     end
 
     if block_given?
