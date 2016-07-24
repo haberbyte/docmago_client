@@ -73,18 +73,6 @@ module DocmagoClient
       raise DocmagoClient::Error::IntegrityCheckError.new, 'File corrupt (invalid MD5 checksum)'
     end
 
-    if block_given?
-      ret_val = nil
-      Tempfile.open('docmago') do |f|
-        f.sync = true
-        f.write(response.body.force_encoding('utf-8'))
-        f.rewind
-
-        ret_val = yield f, response
-      end
-      ret_val
-    else
-      response
-    end
+    response
   end
 end
