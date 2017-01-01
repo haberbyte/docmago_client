@@ -7,17 +7,12 @@ require 'docmago_client/error'
 require 'docmago_client/html_resource_archiver'
 
 if defined?(Rails)
-  if Rails.respond_to?(:version) && Rails.version =~ /^(3|4)/
-    require 'docmago_client/railtie'
-  else
-    raise "docmago_client #{DocmagoClient::VERSION} is only compatible with Rails 3 or 4"
-  end
+  require 'docmago_client/railtie'
 end
 
 module DocmagoClient
   class << self
-    attr_accessor :base_uri, :api_key
-    attr_writer :logger
+    attr_writer :base_uri, :api_key, :logger
 
     def logger
       @logger ||= Logger.new($stdout)
