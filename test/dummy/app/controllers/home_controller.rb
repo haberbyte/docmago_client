@@ -9,7 +9,7 @@ class HomeController < ApplicationController
   def subdir_template
     respond_to do |format|
       format.html
-      format.pdf { render pdf: 'subdir_template' }
+      format.pdf { render pdf: 'subdir_template', template: 'home/pdf/subdir_template' }
     end
   end
 end

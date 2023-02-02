@@ -10,7 +10,7 @@ class NavigationTest < ActiveSupport::IntegrationCase
     click_link 'index'
 
     assert_equal 'binary', headers['Content-Transfer-Encoding']
-    assert_equal 'attachment; filename="contents.pdf"', headers['Content-Disposition']
+    assert_equal "attachment; filename=\"contents.pdf\"; filename*=UTF-8''contents.pdf", headers['Content-Disposition']
     assert_equal 'application/pdf', headers['Content-Type']
   end
 
@@ -19,7 +19,7 @@ class NavigationTest < ActiveSupport::IntegrationCase
     click_link 'subdir_template'
 
     assert_equal 'binary', headers['Content-Transfer-Encoding']
-    assert_equal 'attachment; filename="subdir_template.pdf"', headers['Content-Disposition']
+    assert_equal "attachment; filename=\"subdir_template.pdf\"; filename*=UTF-8''subdir_template.pdf", headers['Content-Disposition']
     assert_equal 'application/pdf', headers['Content-Type']
   end
 

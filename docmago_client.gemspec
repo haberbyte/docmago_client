@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri', '~> 1.7'
   s.add_dependency 'addressable', '~> 2.3'
 
-  s.add_development_dependency 'rails', '~> 5.0'
-  s.add_development_dependency 'sqlite3', '~> 1.3'
+  s.add_development_dependency 'rails', '~> 6.1'
+  s.add_development_dependency 'sqlite3', '~> 1.6'
   s.add_development_dependency 'capybara', '~> 2.7'
 end
