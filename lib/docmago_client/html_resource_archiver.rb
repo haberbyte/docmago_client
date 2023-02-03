@@ -25,7 +25,7 @@ module DocmagoClient
           uri = Addressable::URI.parse uri.to_s.strip
           path_digest = Digest::MD5.hexdigest(uri.to_s)
 
-          file_data = open(uri).read if uri.absolute?
+          file_data = URI.open(uri).read if uri.absolute?
           file_data ||= File.read(resolve_uri(uri)) if File.exist?(resolve_uri(uri))
           file_data ||= @assets[normalize_uri(uri).gsub(SPROCKETS_RX, '')].to_s
 
